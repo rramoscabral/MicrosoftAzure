@@ -1,0 +1,236 @@
+{
+   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+   "contentVersion": "1.0.0.0",
+   "parameters": { 
+    "SharedInfrastructure" :{
+        "type" : "string",
+        "metadata": {
+            "description" : "Resource group name for Shared Infrastructure."
+        }
+    },
+    "RDDev" :{
+        "type" : "string",
+        "metadata": {
+            "description" : "Resource group name for Development."
+        }
+    },   
+     "RGProd" :{
+        "type" : "string",
+        "metadata": {
+            "description" : "Resource group name for Production."
+        }
+    },  
+     "Location" :{
+        "type" : "string",
+        "defaultValue": "NorthEurope",
+        "metadata": {
+            "description" : "Specifies the location of the data center."
+        }
+    },   
+     "StorageSkuNam" :{
+        "type" : "string",
+        "defaultValue": "Standard_LRS",
+        "allowedValues": [
+            "Standard_LRS"
+        ],
+        "metadata": {
+            "description" : "Specific Pricing Tier or Stock Keeping Unit (SKU)"
+        }
+    }, 
+     "SqlSrvDevUsername" :{
+        "type" : "string",
+        "defaultValue": "DevAdmin",
+        "metadata": {
+            "description" : "Specifies the Development SQL Database server username administrator for the new server."
+        }
+    }, 
+      "SqlSrvDevPassword" :{
+        "type" : "securestring",
+        "metadata": {
+            "description" : "Specifies the Development SQL Database server password administrator for the new server"
+        }
+    },  
+     "SqlSrvProdUsername" :{
+        "type" : "string",
+        "defaultValue": "ProdAdmin",
+        "metadata": {
+            "description" : "Specifies the Production SQL Database server username administrator for the new server."
+        }
+    },
+     "SqlSrvProdPassword" :{
+        "type" : "securestring",
+        "metadata": {
+            "description" : "Specifies the Production SQL Database server password administrator for the new server"
+        }
+    },
+     "SqlSrDevVersion" :{
+        "type" : "string",
+        "defaultValue": "12.0",
+        "allowedValues": [
+            "11.0",
+            "12.0"
+        ],
+        "metadata": {
+            "description" : "The acceptable values for this parameter are: 2.0 and 12.0. Specify 2.0 to create a version 11 server, or 12.0 to create a version 12 server."
+        }
+    },
+    "SqlSrProVersion" :{
+        "type" : "string",
+        "defaultValue": "12.0",
+        "allowedValues": [
+            "11.0",
+            "12.0"
+        ],
+        "metadata": {
+            "description" : "The acceptable values for this parameter are: 2.0 and 12.0. Specify 2.0 to create a version 11 server, or 12.0 to create a version 12 server."
+        }
+    },
+     "SqlDatabaseEdition" :{
+        "type" : "string",
+        "defaultValue": "Free",
+        "allowedValues": [
+            "Default",
+            "None", 
+            "Premium", 
+            "Basic", 
+            "Standard", 
+            "DataWarehouse", 
+            "Free"
+        ],
+        "metadata": {
+            "description" : "Specifies the edition to assign to the database. The acceptable values for this parameter are: Default, None, Premium, Basic, Standard, DataWarehouse, Free."
+        }
+    },
+     "SqlDatabaseServiceObjectiveName" :{
+        "type" : "string",
+        "defaultValue": "Basic",
+        "allowedValues": [
+            "Basic", 
+            "S0", 
+            "S1", 
+            "S2", 
+            "S3", 
+            "P1", 
+            "P2", 
+            "P3", 
+            "P4", 
+            "P6", 
+            "P11", 
+            "P15"
+        ],
+        "metadata": {
+            "description" : "Specifies the name of the service objective to assign to the Azure SQL Database.The acceptable values for this parameter are: Basic, S0 , S1, S2, S3, P1, P2, P3, P4, P6, P11, P15"
+        }
+    },
+     "SqlDatabaseMaxSizeBytes" :{
+        "type" : "string",
+        "defaultValue": "5000000",
+        "metadata": {
+            "description" : "Specifies the maximum size for the newly imported database"
+        }
+    },
+       "SqlCollationName" :{
+        "type" : "string",
+        "defaultValue": "SQL_Latin1_General_CP1_CI_AS",
+        "metadata": {
+            "description" : "Specifies the name of the SQL database collation https://msdn.microsoft.com/en-us/library/ms143515(v=sql.105).aspx "
+        }
+    },
+       "BacpacLocalFolder" :{
+        "type" : "string",
+        "metadata": {
+            "description" : "Specifies the maximum size for the newly imported database"
+        }
+    },
+       "BacpacLocalFile" :{
+        "type" : "string",
+        "metadata": {
+            "description" : ""
+
+        }
+    },
+       "StorageKeyType" :{
+        "type" : "string",
+        "defaultValue": "StorageAccessKey",
+        "allowedValues": [
+            "StorageAccessKey",
+            "SharedAccessKey"
+        ],
+        "metadata": {
+            "description" : "Specifies the type of access key for the storage account. The acceptable values for this parameter are: 'StorageAccessKey' Uses the storage account key ; 'SharedAccessKey' Uses the Shared Access Signature (SAS) key."
+        }
+    }
+    },
+   "variables": { 
+
+       "SharedInfrastructureLC" : "[toLower(parameters('SharedInfrastructure'))]",
+       "DevelopmentLC" : "[toLower(parameters('Development'))]",
+       "ProductionLC" : "[toLower(parameters('Production'))]",
+
+       "SharedInfrastructure" :  "[replace(variables('SharedInfrastructureLC'),'-','')]",
+       "Development" :  "[replace(variables('DevelopmentLC'),'-','')]",
+       "Production" :"[replace(variables('ProductionLC'),'-','')]",
+       "Location" :"[replace(parameters('Location'),' ','')])]",
+
+       "RGSharedInfrastructure" : "[concat 'RG-' variables(SharedInfrastructure)]",
+       "RGDevelopment" : "[concat 'RG-' variables(Development)]",
+       "RGProduction"  : "[concat 'RG-' variables(Production)]",
+       "SqlSrvDevelopment" : "[concat 'sqlsrv-' variables(Development)]",
+       "SqlSrvProduction" : "[concat 'sqlsrv-' variables(Production)]",
+       "DevDBName" : "devdb"
+
+    },
+   "resources": [ 
+    {
+      "name": "[variables('SqlSrvDevelopment')]",
+      "type": "Microsoft.Sql/servers",
+      "location": "[variables('Location']",
+      "tags": {
+        "displayName": "[variables('SqlSrvDevelopment')]"
+      },
+      "apiVersion": "2014-04-01-preview",
+      "properties": {
+        "administratorLogin": "[parameters('SqlSrvDevUsername')]",
+        "administratorLoginPassword": "[parameters('SqlSrvDevPassword')]",
+        "version": "[parameters('SqlSrDevVersion')]"
+      },
+      "resources": [
+        {
+          "name": "[variables('DevDBName')]",
+          "type": "databases",
+          "location": "[variables('Location']",
+          "tags": {
+            "displayName": "[variables('DevDBName')]"
+          },
+          "apiVersion": "2014-04-01-preview",
+          "dependsOn": [
+            "[variables('SqlSrvDevelopment')]"
+          ],
+          "properties": {
+            "edition": "[parameters('SqlDatabaseEdition')]",
+            "collation": "[parameters('SqlCollationNam')]",
+            "maxSizeBytes": "[parameters('SqlDatabaseMaxSizeBytes')]",
+            "requestedServiceObjectiveName": "[parameters('SqlDatabaseServiceObjectiveName')]"
+          }
+        },
+        {
+          "type": "firewallrules",
+          "apiVersion": "2014-04-01-preview",
+          "dependsOn": [
+            "[variables('SqlSrvDevelopment')]"
+          ],
+          "location":  "[variables('Location']",
+          "name": "AllowAllWindowsAzureIps",
+          "properties": {
+            "endIpAddress": "0.0.0.0",
+            "startIpAddress": "0.0.0.0"
+          }
+        }
+      ]
+    }
+   
+    ],
+   "outputs": {  
+
+   }
+}
