@@ -1,44 +1,88 @@
 {
-   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-   "contentVersion": "1.0.0.0",
-   "parameters": { 
-    "SharedInfrastructure" :{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": { 
+        "Development" :{
+            "type" : "string",
+            "defaultValue": "ARMDev",
+            "metadata": {
+                "description" : "Development resources nickname"
+            }
+        },
+        
+        "VirtualNetworkName" :{
         "type" : "string",
+        "defaultValue": "VNET-DEV",
         "metadata": {
-            "description" : "Resource group name for Shared Infrastructure."
+            "description" : "Specific the name for the Development Virtual Network"
         }
-    },
-    "RDDev" :{
+        }, 
+        
+		"vnetPrefix" :{
         "type" : "string",
+        "defaultValue": "10.0.0.0/16",
         "metadata": {
-            "description" : "Resource group name for Development."
+            "description" : "Specific the netwotk prefix "
         }
-    },   
-     "RGProd" :{
+        }, 
+		
+		
+        "vnetSubnetName1" :{
         "type" : "string",
+        "defaultValue": "Subnet-DEV-1",
         "metadata": {
-            "description" : "Resource group name for Production."
+            "description" : "Specific the name for the Development subnet 1."
         }
-    },  
-     "Location" :{
+        }, 
+        
+		"vnetSubnetPrefix1" :{
         "type" : "string",
-        "defaultValue": "NorthEurope",
+        "defaultValue": "10.0.0.0/24",
         "metadata": {
-            "description" : "Specifies the location of the data center."
+            "description" : "Specific the subnet 1 Addres Prefix "
         }
-    },   
-     "StorageSkuNam" :{
+        }, 
+		
+		"vnetSubnetName2" :{
+        "type" : "string",
+        "defaultValue": "Subnet-DEV-2",
+        "metadata": {
+            "description" : "Specific the name for the Development subnet 2."
+        }
+        },
+	
+		"vnetSubnetPrefix2" :{
+        "type" : "string",
+        "defaultValue": "10.0.1.0/24",
+        "metadata": {
+            "description" : "Specific the subnet 2 Addres Prefix "
+        }
+        },
+		
+		"StorageAccountName" :{
+        "type" : "string",
+        "defaultValue": "devstoragegeneral",
+        "metadata": {
+            "description" : "Storage account name must be between 3 and 24 characters in length and use numbers and lower-case letters only."
+        }
+        },
+		"StorageSkuName" :{
         "type" : "string",
         "defaultValue": "Standard_LRS",
         "allowedValues": [
-            "Standard_LRS"
+            "Standard_LRS",
+            "Standard_GRS",
+            "Standard_RAGRS",
+            "Standard_ZRS",
+            "Premium_LRS"
         ],
         "metadata": {
-            "description" : "Specific Pricing Tier or Stock Keeping Unit (SKU)"
+            "description" : "Specific Pricing Tier or Stock Keeping Unit (SKU). The acceptable values for this parameter are Standard Locally Redundant Storage (Standard_LRS), Standard Geo Replicated Storage (Standard_GRS), Standard Read-Access Geo Replicated Storage (Standard_RAGRS),Standard Zone Redundant Storage (Standard_ZRS), Provisioned IO Locally Redundant Storage (Premium_LRS)"
         }
     }, 
      "SqlSrvDevUsername" :{
         "type" : "string",
+		"minLength": 1,
         "defaultValue": "DevAdmin",
         "metadata": {
             "description" : "Specifies the Development SQL Database server username administrator for the new server."
@@ -46,21 +90,9 @@
     }, 
       "SqlSrvDevPassword" :{
         "type" : "securestring",
+		"minLength": 8,
         "metadata": {
             "description" : "Specifies the Development SQL Database server password administrator for the new server"
-        }
-    },  
-     "SqlSrvProdUsername" :{
-        "type" : "string",
-        "defaultValue": "ProdAdmin",
-        "metadata": {
-            "description" : "Specifies the Production SQL Database server username administrator for the new server."
-        }
-    },
-     "SqlSrvProdPassword" :{
-        "type" : "securestring",
-        "metadata": {
-            "description" : "Specifies the Production SQL Database server password administrator for the new server"
         }
     },
      "SqlSrDevVersion" :{
@@ -74,20 +106,16 @@
             "description" : "The acceptable values for this parameter are: 2.0 and 12.0. Specify 2.0 to create a version 11 server, or 12.0 to create a version 12 server."
         }
     },
-    "SqlSrProVersion" :{
+    "DevDBName1"  :{
         "type" : "string",
-        "defaultValue": "12.0",
-        "allowedValues": [
-            "11.0",
-            "12.0"
-        ],
+        "defaultValue": "DevDB1",
         "metadata": {
-            "description" : "The acceptable values for this parameter are: 2.0 and 12.0. Specify 2.0 to create a version 11 server, or 12.0 to create a version 12 server."
+            "description" : "Specifies the name for the first database"
         }
     },
-     "SqlDatabaseEdition" :{
+     "SqlDatabaseEdition1" :{
         "type" : "string",
-        "defaultValue": "Free",
+        "defaultValue": "Basic",
         "allowedValues": [
             "Default",
             "None", 
@@ -98,7 +126,30 @@
             "Free"
         ],
         "metadata": {
-            "description" : "Specifies the edition to assign to the database. The acceptable values for this parameter are: Default, None, Premium, Basic, Standard, DataWarehouse, Free."
+            "description" : "Specifies the edition to assign to the first database. The acceptable values for this parameter are: Default, None, Premium, Basic, Standard, DataWarehouse, Free."
+        }
+    },
+    "DevDBName2"  :{
+        "type" : "string",
+        "defaultValue": "DevDB2",
+        "metadata": {
+            "description" : "Specifies the name for the first database"
+        }
+    },
+         "SqlDatabaseEdition2" :{
+        "type" : "string",
+        "defaultValue": "Basic",
+        "allowedValues": [
+            "Default",
+            "None", 
+            "Premium", 
+            "Basic", 
+            "Standard", 
+            "DataWarehouse", 
+            "Free"
+        ],
+        "metadata": {
+            "description" : "Specifies the edition to assign to the first database. The acceptable values for this parameter are: Default, None, Premium, Basic, Standard, DataWarehouse, Free."
         }
     },
      "SqlDatabaseServiceObjectiveName" :{
@@ -122,115 +173,189 @@
             "description" : "Specifies the name of the service objective to assign to the Azure SQL Database.The acceptable values for this parameter are: Basic, S0 , S1, S2, S3, P1, P2, P3, P4, P6, P11, P15"
         }
     },
-     "SqlDatabaseMaxSizeBytes" :{
-        "type" : "string",
-        "defaultValue": "5000000",
-        "metadata": {
-            "description" : "Specifies the maximum size for the newly imported database"
-        }
-    },
-       "SqlCollationName" :{
+        "SqlCollationName" :{
         "type" : "string",
         "defaultValue": "SQL_Latin1_General_CP1_CI_AS",
         "metadata": {
             "description" : "Specifies the name of the SQL database collation https://msdn.microsoft.com/en-us/library/ms143515(v=sql.105).aspx "
         }
     },
-       "BacpacLocalFolder" :{
-        "type" : "string",
-        "metadata": {
-            "description" : "Specifies the maximum size for the newly imported database"
-        }
-    },
-       "BacpacLocalFile" :{
-        "type" : "string",
-        "metadata": {
-            "description" : ""
 
-        }
-    },
-       "StorageKeyType" :{
+    "PublicLocalIP" :{
         "type" : "string",
-        "defaultValue": "StorageAccessKey",
-        "allowedValues": [
-            "StorageAccessKey",
-            "SharedAccessKey"
-        ],
         "metadata": {
-            "description" : "Specifies the type of access key for the storage account. The acceptable values for this parameter are: 'StorageAccessKey' Uses the storage account key ; 'SharedAccessKey' Uses the Shared Access Signature (SAS) key."
+            "description" : "You public IP Address you can view at http://ipinfo.io/" 
         }
     }
     },
    "variables": { 
-
-       "SharedInfrastructureLC" : "[toLower(parameters('SharedInfrastructure'))]",
+       "StorageAccountNameLC" : "[toLower(parameters('StorageAccountName'))]",
        "DevelopmentLC" : "[toLower(parameters('Development'))]",
-       "ProductionLC" : "[toLower(parameters('Production'))]",
-
-       "SharedInfrastructure" :  "[replace(variables('SharedInfrastructureLC'),'-','')]",
        "Development" :  "[replace(variables('DevelopmentLC'),'-','')]",
-       "Production" :"[replace(variables('ProductionLC'),'-','')]",
-       "Location" :"[replace(parameters('Location'),' ','')])]",
-
-       "RGSharedInfrastructure" : "[concat 'RG-' variables(SharedInfrastructure)]",
-       "RGDevelopment" : "[concat 'RG-' variables(Development)]",
-       "RGProduction"  : "[concat 'RG-' variables(Production)]",
-       "SqlSrvDevelopment" : "[concat 'sqlsrv-' variables(Development)]",
-       "SqlSrvProduction" : "[concat 'sqlsrv-' variables(Production)]",
-       "DevDBName" : "devdb"
-
+	   "Sqlsrv" :  "sqlsrv-",
+       "SqlSrvDevelopment" : "[concat(variables('Sqlsrv'), variables('Development'))]",
+       "fullyQualifiedDevDatabase1Name": "[concat(variables('SqlSrvDevelopment'), '/', parameters('DevDBName1'))]",
+       "fullyQualifiedDevDatabase2Name": "[concat(variables('SqlSrvDevelopment'), '/', parameters('DevDBName2'))]"
+    	   
     },
-   "resources": [ 
-    {
-      "name": "[variables('SqlSrvDevelopment')]",
-      "type": "Microsoft.Sql/servers",
-      "location": "[variables('Location']",
-      "tags": {
-        "displayName": "[variables('SqlSrvDevelopment')]"
-      },
-      "apiVersion": "2014-04-01-preview",
-      "properties": {
-        "administratorLogin": "[parameters('SqlSrvDevUsername')]",
-        "administratorLoginPassword": "[parameters('SqlSrvDevPassword')]",
-        "version": "[parameters('SqlSrDevVersion')]"
-      },
-      "resources": [
+    "resources": [
         {
-          "name": "[variables('DevDBName')]",
-          "type": "databases",
-          "location": "[variables('Location']",
-          "tags": {
-            "displayName": "[variables('DevDBName')]"
-          },
-          "apiVersion": "2014-04-01-preview",
-          "dependsOn": [
-            "[variables('SqlSrvDevelopment')]"
-          ],
-          "properties": {
-            "edition": "[parameters('SqlDatabaseEdition')]",
-            "collation": "[parameters('SqlCollationNam')]",
-            "maxSizeBytes": "[parameters('SqlDatabaseMaxSizeBytes')]",
-            "requestedServiceObjectiveName": "[parameters('SqlDatabaseServiceObjectiveName')]"
-          }
+			"comments": "DevelopmentVirtualNetwork",
+            "name": "[parameters('VirtualNetworkName')]",
+            "type": "Microsoft.Network/virtualNetworks",
+            "location": "[resourceGroup().location]",
+            "apiVersion": "2015-06-15",
+            "dependsOn": [],
+            "tags": {
+                "displayName": "Development Virtual Network"
+            },
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "[parameters('vnetPrefix')]"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "[parameters('vnetSubnetName1')]",
+                        "properties": {
+                            "addressPrefix": "[parameters('vnetSubnetPrefix1')]"
+                        }
+                    },
+                    {
+                        "name": "[parameters('vnetSubnetName2')]",
+                        "properties": {
+                            "addressPrefix": "[parameters('vnetSubnetPrefix2')]"
+                        }
+                    }
+                ]
+            }
         },
         {
-          "type": "firewallrules",
-          "apiVersion": "2014-04-01-preview",
-          "dependsOn": [
-            "[variables('SqlSrvDevelopment')]"
-          ],
-          "location":  "[variables('Location']",
-          "name": "AllowAllWindowsAzureIps",
-          "properties": {
-            "endIpAddress": "0.0.0.0",
-            "startIpAddress": "0.0.0.0"
-          }
+			"comments": "DevelopmentStorageAccountName",
+            "name": "[variables('StorageAccountNameLC')]",
+            "type": "Microsoft.Storage/storageAccounts",
+            "location": "[resourceGroup().location]",
+            "apiVersion": "2015-06-15",
+            "dependsOn": [],
+            "tags": {
+                "displayName": "Development Storage Account"
+            },
+            "properties": {
+                "accountType": "[parameters('StorageSkuName')]"
+            }
+        },
+        {
+			"comments": "DevelopmentSQLServerName",
+            "name": "[variables('SqlSrvDevelopment')]",
+            "type": "Microsoft.Sql/servers",
+            "location": "[resourceGroup().location]",
+            "apiVersion": "2014-04-01-preview",
+            "dependsOn": [],
+            "tags": {
+                "displayName": "Development SQL Server"
+            },
+            "properties": {
+                "administratorLogin": "[parameters('SqlSrvDevUsername')]",
+                "administratorLoginPassword": "[parameters('SqlSrvDevPassword')]",
+				"version": "[parameters('SqlSrDevVersion')]"
+            },
+            "resources": [
+                {
+                    "name": "AllowAllWindowsAzureIps",
+                    "type": "firewallrules",
+                    "location": "[resourceGroup().location]",
+                    "apiVersion": "2014-04-01-preview",
+                    "dependsOn": [
+                        "[concat('Microsoft.Sql/servers/', variables('SqlSrvDevelopment'))]"
+                    ],
+                    "properties": {
+                        "startIpAddress": "0.0.0.0",
+                        "endIpAddress": "0.0.0.0"
+                    }
+                },
+				{
+                    "name": "PublicLocalIP",
+                    "type": "firewallrules",
+                    "location": "[resourceGroup().location]",
+                    "apiVersion": "2014-04-01-preview",
+                    "dependsOn": [
+                        "[concat('Microsoft.Sql/servers/', variables('SqlSrvDevelopment'))]"
+                    ],
+                    "properties": {
+                        "startIpAddress": "[parameters('PublicLocalIP')]",
+                        "endIpAddress": "[parameters('PublicLocalIP')]"
+                    }
+                }
+            ]
+        },
+        {
+			"comments": "DevelopmentDatabase1",
+            "name": "[variables('fullyQualifiedDevDatabase1Name')]",
+            "type": "Microsoft.Sql/servers/databases",
+            "location": "[resourceGroup().location]",
+            "apiVersion": "2014-04-01-preview",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', variables('SqlSrvDevelopment'))]"
+            ],
+            "tags": {
+                "displayName": "DevDatabase1"
+            },
+            "properties": {
+                "collation": "[parameters('SqlCollationName')]",
+                "edition": "[parameters('SqlDatabaseEdition1')]",
+                "requestedServiceObjectiveName": "[parameters('SqlDatabaseServiceObjectiveName')]"
+            }
+        },
+        {
+			"comments": "DevelopmentDatabase2",
+            "name": "[variables('fullyQualifiedDevDatabase2Name')]",
+            "type": "Microsoft.Sql/servers/databases",
+            "location": "[resourceGroup().location]",
+            "apiVersion": "2014-04-01-preview",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', variables('SqlSrvDevelopment'))]"
+            ],
+            "tags": {
+                "displayName": "DevDatabase2"
+            },
+            "properties": {
+                "collation": "[parameters('SqlCollationName')]",
+                "edition": "[parameters('SqlDatabaseEdition2')]",
+                "requestedServiceObjectiveName": "[parameters('SqlDatabaseServiceObjectiveName')]"
+            }
         }
-      ]
-    }
-   
     ],
-   "outputs": {  
-
-   }
+	"outputs": {  
+       "SQLServerResourceID": {
+			"type": "string",
+			"value": "[resourceId('Microsoft.Sql/servers', variables('SqlSrvDevelopment'))]"
+		},
+		"sqlSvrFqdn": {
+			"type": "string",
+			"value": "[reference(concat('Microsoft.Sql/servers/', variables('SqlSrvDevelopment'))).fullyQualifiedDomainName]"
+		},
+		"SqlServerURL": {
+			"type": "string",
+			"value": "[reference(variables('SqlSrvDevelopment')).fullyQualifiedDomainName]"
+		},
+		"DB1ResourceID": {
+			"type": "string",
+			"value": "[resourceId('Microsoft.Sql/servers/databases', variables('SqlSrvDevelopment'), parameters('DevDBName1'))]"
+		},
+		"DB2ResourceID": {
+			"type": "string",
+			"value": "[resourceId('Microsoft.Sql/servers/databases', variables('SqlSrvDevelopment'), parameters('DevDBName2'))]"
+		},
+		"DatabaseConnectionString2" :
+		{ 
+			"type": "string",
+			"value": "[concat('Server=tcp:',reference(variables('SqlSrvDevelopment')).fullyQualifiedDomainName,',1433;Initial Catalog=',parameters('DevDBName1'),';Persist Security Info=False;User ID=',reference(variables('SqlSrvDevelopment')).administratorLogin,';Password=',reference(variables('SqlSrvDevelopment')).administratorLoginPassword,';MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;')]" 
+		},
+		"DatabaseConnectionString1" :
+		{ 
+			"type": "string",
+			"value": "[concat('Server=tcp:',reference(variables('SqlSrvDevelopment')).fullyQualifiedDomainName,',1433;Initial Catalog=',parameters('DevDBName2'),';Persist Security Info=False;User ID=',reference(variables('SqlSrvDevelopment')).administratorLogin,';Password=',reference(variables('SqlSrvDevelopment')).administratorLoginPassword,';MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;')]" 
+		}
+	}
 }
