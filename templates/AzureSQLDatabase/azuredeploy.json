@@ -6,7 +6,7 @@
             "type" : "string",
             "defaultValue": "ARMDev",
             "metadata": {
-                "description" : "Development resources nickname"
+                "description" : "Specifies Development resources nickname"
             }
         },
         
@@ -14,7 +14,7 @@
         "type" : "string",
         "defaultValue": "VNET-DEV",
         "metadata": {
-            "description" : "Specific the name for the Development Virtual Network"
+            "description" : "Specifies the name for the Development Virtual Network"
         }
         }, 
         
@@ -22,7 +22,7 @@
         "type" : "string",
         "defaultValue": "10.0.0.0/16",
         "metadata": {
-            "description" : "Specific the netwotk prefix "
+            "description" : "Specifies the network prefix "
         }
         }, 
 		
@@ -31,7 +31,7 @@
         "type" : "string",
         "defaultValue": "Subnet-DEV-1",
         "metadata": {
-            "description" : "Specific the name for the Development subnet 1."
+            "description" : "Specifies the name for the Development subnet 1."
         }
         }, 
         
@@ -39,7 +39,7 @@
         "type" : "string",
         "defaultValue": "10.0.0.0/24",
         "metadata": {
-            "description" : "Specific the subnet 1 Addres Prefix "
+            "description" : "Specifies the subnet 1 Addres Prefix "
         }
         }, 
 		
@@ -47,7 +47,7 @@
         "type" : "string",
         "defaultValue": "Subnet-DEV-2",
         "metadata": {
-            "description" : "Specific the name for the Development subnet 2."
+            "description" : "Specifies the name for the Development subnet 2."
         }
         },
 	
@@ -55,7 +55,7 @@
         "type" : "string",
         "defaultValue": "10.0.1.0/24",
         "metadata": {
-            "description" : "Specific the subnet 2 Addres Prefix "
+            "description" : "Specifies the subnet 2 Addres Prefix "
         }
         },
 		
@@ -63,7 +63,7 @@
         "type" : "string",
         "defaultValue": "devstoragegeneral",
         "metadata": {
-            "description" : "Storage account name must be between 3 and 24 characters in length and use numbers and lower-case letters only."
+            "description" : "Specifies storage account name must be between 3 and 24 characters in length and use numbers and lower-case letters only."
         }
         },
 		"StorageSkuName" :{
@@ -77,7 +77,7 @@
             "Premium_LRS"
         ],
         "metadata": {
-            "description" : "Specific Pricing Tier or Stock Keeping Unit (SKU). The acceptable values for this parameter are Standard Locally Redundant Storage (Standard_LRS), Standard Geo Replicated Storage (Standard_GRS), Standard Read-Access Geo Replicated Storage (Standard_RAGRS),Standard Zone Redundant Storage (Standard_ZRS), Provisioned IO Locally Redundant Storage (Premium_LRS)"
+            "description" : "Specifies Pricing Tier or Stock Keeping Unit (SKU). The acceptable values for this parameter are Standard Locally Redundant Storage (Standard_LRS), Standard Geo Replicated Storage (Standard_GRS), Standard Read-Access Geo Replicated Storage (Standard_RAGRS),Standard Zone Redundant Storage (Standard_ZRS), Provisioned IO Locally Redundant Storage (Premium_LRS)"
         }
     }, 
      "SqlSrvDevUsername" :{
@@ -103,7 +103,7 @@
             "12.0"
         ],
         "metadata": {
-            "description" : "The acceptable values for this parameter are: 2.0 and 12.0. Specify 2.0 to create a version 11 server, or 12.0 to create a version 12 server."
+            "description" : "Specifies the SQL server version. The acceptable values for this parameter are: 12.0 to create a version 11 server, or 12.0 to create a version 12 server."
         }
     },
     "DevDBName1"  :{
@@ -126,14 +126,14 @@
             "Free"
         ],
         "metadata": {
-            "description" : "Specifies the edition to assign to the first database. The acceptable values for this parameter are: Default, None, Premium, Basic, Standard, DataWarehouse, Free."
+            "description" : "Specifies the edition to assign to the first database. The acceptable values for this parameter are: Default, None, Premium, Basic, Standard, DataWarehouse, and Free."
         }
     },
     "DevDBName2"  :{
         "type" : "string",
         "defaultValue": "DevDB2",
         "metadata": {
-            "description" : "Specifies the name for the first database"
+            "description" : "Specifies the name for the second database"
         }
     },
          "SqlDatabaseEdition2" :{
@@ -149,7 +149,7 @@
             "Free"
         ],
         "metadata": {
-            "description" : "Specifies the edition to assign to the first database. The acceptable values for this parameter are: Default, None, Premium, Basic, Standard, DataWarehouse, Free."
+            "description" : "Specifies the edition to assign to the second database. The acceptable values for this parameter are: Default, None, Premium, Basic, Standard, DataWarehouse, and Free."
         }
     },
      "SqlDatabaseServiceObjectiveName" :{
@@ -170,7 +170,7 @@
             "P15"
         ],
         "metadata": {
-            "description" : "Specifies the name of the service objective to assign to the Azure SQL Database.The acceptable values for this parameter are: Basic, S0 , S1, S2, S3, P1, P2, P3, P4, P6, P11, P15"
+            "description" : "Specifies the name of the service objective to assign to the Azure SQL Database.The acceptable values for this parameter are: Basic, S0 , S1, S2, S3, P1, P2, P3, P4, P6, P11, and P15"
         }
     },
         "SqlCollationName" :{
